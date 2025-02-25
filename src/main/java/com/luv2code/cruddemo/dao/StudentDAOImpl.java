@@ -37,8 +37,19 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public List<Student> findAll() {
-        TypedQuery<Student> theQuery = entityManager.createQuery("From Student", Student.class);
+        // Note that most of the query string is not case-sensitive (except for the entity name and entity fields).
+        // asc is the default (could choose desc)
+        // TypedQuery<Student> theQuery = entityManager.createQuery("from Student order by lastName asc", Student.class);
+        TypedQuery<Student> theQuery = entityManager.createQuery("from Student", Student.class);
 
         return theQuery.getResultList();
+    }
+
+    @Override
+    public List<Student> findByLastName(String lastName) {
+        TypedQuery<Student> query = entityManager.createQuery("FROM Student WHERE lastName=:lastName", Student.class);
+        query.setParameter("lastName", lastName);
+
+        return query.getResultList();
     }
 }
